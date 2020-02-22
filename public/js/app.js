@@ -19341,12 +19341,31 @@ $(".h3x-sidenav-toggler").click(function () {
     closeSideNav();
   }
 });
-$("#main-content").click(function () {
+
+window.toggleSwipe = function () {
+  if ($(window).width() < 992 && !$("#main-content").hasClass("allow-swipe")) {
+    $("#main-content").addClass("allow-swipe");
+    $("#main-content").swipe("enable");
+  } else {
+    if ($("#main-content").hasClass("allow-swipe")) {
+      $("#main-content").removeClass("allow-swipe");
+      $("#main-content").swipe("disable");
+    }
+  }
+};
+
+$(document).ready(function () {
+  toggleSwipe();
+});
+$(window).resize(function () {
+  toggleSwipe();
+});
+$(document).on('click', '.allow-swipe', function () {
   if ($nav.attr("data-expanded") == "true") {
     closeSideNav();
   }
 });
-$("#main-content").swipe({
+$('#main-content').swipe({
   swipeRight: function swipeRight() {
     if ($nav.attr("data-expanded") == "false") {
       openSideNav();
@@ -19362,7 +19381,7 @@ $("main").scroll(function (e) {
   var winScroll = document.getElementById("main-content").scrollTop;
   var height = document.getElementById("main-content").scrollHeight - document.getElementById("main-content").clientHeight;
   var scrolled = winScroll / height * 100;
-  $('.h3x-page-scroll-progress').css('width', "".concat(scrolled, "%"));
+  $(".h3x-page-scroll-progress").css("width", "".concat(scrolled, "%"));
 });
 
 /***/ }),

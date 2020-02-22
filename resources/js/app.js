@@ -15,10 +15,7 @@ window.openSideNav = () => {
     $nav.css({
         width: SideBarWidth
     });
-    if (
-        window.innerHeight > 370 &&
-        $(".h3x-side-nav-divider").height() == 0
-    ) {
+    if (window.innerHeight > 370 && $(".h3x-side-nav-divider").height() == 0) {
         setTimeout(() => {
             $(".h3x-side-nav-divider").animate(
                 {
@@ -29,13 +26,10 @@ window.openSideNav = () => {
         }, 500);
     }
     $nav.attr("data-expanded", "true");
-}
+};
 
 window.closeSideNav = () => {
-    if (
-        window.innerHeight > 370 &&
-        $(".h3x-side-nav-divider").height() > 1
-    ) {
+    if (window.innerHeight > 370 && $(".h3x-side-nav-divider").height() > 1) {
         $(".h3x-side-nav-divider").animate(
             {
                 height: 0
@@ -60,7 +54,7 @@ window.closeSideNav = () => {
         });
         $nav.attr("data-expanded", "false");
     }
-}
+};
 
 $(".h3x-sidenav-toggler").click(() => {
     if ($nav.attr("data-expanded") == "false") {
@@ -70,28 +64,53 @@ $(".h3x-sidenav-toggler").click(() => {
     }
 });
 
-$("#main-content").click(() => {
-    if($nav.attr("data-expanded") == "true") {
+window.toggleSwipe = () => {
+    if (
+        $(window).width() < 992 &&
+        !$("#main-content").hasClass("allow-swipe")
+    ) {
+        $("#main-content").addClass("allow-swipe");
+        $("#main-content").swipe("enable");
+    } else {
+        if ($("#main-content").hasClass("allow-swipe")) {
+            $("#main-content").removeClass("allow-swipe");
+            $("#main-content").swipe("disable");
+        }
+    }
+};
+
+$(document).ready(() => {
+    toggleSwipe();
+});
+
+$(window).resize(() => {
+    toggleSwipe();
+});
+
+$(document).on('click', '.allow-swipe', () => {
+    if ($nav.attr("data-expanded") == "true") {
         closeSideNav();
     }
 });
 
-$("#main-content").swipe({
+$('#main-content').swipe({
     swipeRight: () => {
-        if($nav.attr("data-expanded") == "false") { 
-            openSideNav()
+        if ($nav.attr("data-expanded") == "false") {
+            openSideNav();
         }
     },
     swipeLeft: () => {
-        if($nav.attr("data-expanded") == "true") { 
-            closeSideNav()
+        if ($nav.attr("data-expanded") == "true") {
+            closeSideNav();
         }
     }
 });
 
-$("main").scroll((e) => {
+$("main").scroll(e => {
     var winScroll = document.getElementById("main-content").scrollTop;
-    var height = document.getElementById("main-content").scrollHeight - document.getElementById("main-content").clientHeight;
+    var height =
+        document.getElementById("main-content").scrollHeight -
+        document.getElementById("main-content").clientHeight;
     var scrolled = (winScroll / height) * 100;
-    $('.h3x-page-scroll-progress').css('width', `${scrolled}%`);
+    $(".h3x-page-scroll-progress").css("width", `${scrolled}%`);
 });
