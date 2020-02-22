@@ -19286,35 +19286,50 @@ module.exports = function(module) {
  * dependencies. Then, we will be ready to develop a robust and powerful
  * application frontend using useful Laravel and JavaScript libraries.
  */
-var SideBarWidth = 250;
-var $nav = $(".h3x-side-nav");
-
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+var $SideBarWidth = 250;
+var $nav = $(".h3x-side-nav");
+var $main = $("#main-content");
+var $mountpoint = $("#mountpoint");
+var $minHeight = 450;
+
 window.openSideNav = function () {
-  $("main").css({
-    transform: "translateX(".concat(SideBarWidth, "px)")
-  });
-  $nav.css({
-    width: SideBarWidth
-  });
+  if (window.innerWidth < 992) {
+    $("main").css({
+      transform: "translateX(".concat($SideBarWidth, "px)")
+    });
+    $nav.css({
+      width: $SideBarWidth
+    });
 
-  if (window.innerHeight > 370 && $(".h3x-side-nav-divider").height() == 0) {
-    setTimeout(function () {
-      $(".h3x-side-nav-divider").animate({
-        height: "80%"
+    if (window.innerHeight > $minHeight && $(".h3x-side-nav-divider").height() == 0) {
+      setTimeout(function () {
+        $(".h3x-side-nav-divider").animate({
+          height: "80%"
+        }, 500);
       }, 500);
-    }, 500);
-  }
+    }
 
-  $nav.attr("data-expanded", "true");
+    $nav.attr("data-expanded", "true");
+  }
 };
 
 window.closeSideNav = function () {
-  if (window.innerHeight > 370 && $(".h3x-side-nav-divider").height() > 1) {
-    $(".h3x-side-nav-divider").animate({
-      height: 0
-    }, 500, function () {
+  if (window.innerWidth < 992) {
+    if (window.innerHeight > $minHeight && $(".h3x-side-nav-divider").height() > 1) {
+      $(".h3x-side-nav-divider").animate({
+        height: 0
+      }, 500, function () {
+        $("main").css({
+          transform: "translateX(0)"
+        });
+        $nav.css({
+          width: 0
+        });
+        $nav.attr("data-expanded", "false");
+      });
+    } else {
       $("main").css({
         transform: "translateX(0)"
       });
@@ -19322,15 +19337,54 @@ window.closeSideNav = function () {
         width: 0
       });
       $nav.attr("data-expanded", "false");
+    }
+  }
+};
+
+window.toggleSwipe = function () {
+  if ($(window).width() < 992) {
+    if (!$main.hasClass("allow-swipe")) {
+      $main.addClass("allow-swipe");
+      $main.swipe("enable");
+    }
+  } else {
+    if ($main.hasClass("allow-swipe")) {
+      $main.removeClass("allow-swipe");
+      $main.swipe("disable");
+    }
+  }
+};
+
+window.hackFooter = function () {
+  var height = document.getElementById("main-content").scrollHeight - document.getElementById("main-content").clientHeight;
+
+  if (height <= 0) {
+    if (!$main.has(".h3x-fake-footer").length) {
+      $main.append("<div class=\"h3x-active-footer h3x-fake-footer\">".concat($("footer").html(), "</div>"));
+    }
+
+    $("footer").removeClass("h3x-active-footer");
+    $("footer").css({
+      visibility: "hidden"
     });
   } else {
-    $("main").css({
-      transform: "translateX(0)"
+    $(".h3x-fake-footer").remove();
+    $("footer").addClass("h3x-active-footer");
+    $("footer").css({
+      visibility: "visible"
     });
-    $nav.css({
-      width: 0
-    });
-    $nav.attr("data-expanded", "false");
+  }
+};
+
+window.changeFooterHeinThanth = function () {
+  if (window.innerWidth < 350) {
+    if ($(".h3x-active-footer > .h3x-ht-changeable").text() == "Hein Thanth") {
+      $(".h3x-active-footer > .h3x-ht-changeable").text("HT");
+    }
+  } else {
+    if ($(".h3x-active-footer > .h3x-ht-changeable").text() == "HT") {
+      $(".h3x-active-footer > .h3x-ht-changeable").text("Hein Thanth");
+    }
   }
 };
 
@@ -19342,30 +19396,28 @@ $(".h3x-sidenav-toggler").click(function () {
   }
 });
 
-window.toggleSwipe = function () {
-  if ($(window).width() < 992 && !$("#main-content").hasClass("allow-swipe")) {
-    $("#main-content").addClass("allow-swipe");
-    $("#main-content").swipe("enable");
-  } else {
-    if ($("#main-content").hasClass("allow-swipe")) {
-      $("#main-content").removeClass("allow-swipe");
-      $("#main-content").swipe("disable");
-    }
-  }
+window.monitorHacks = function () {
+  toggleSwipe();
+  setScrollProgress();
+  hackFooter();
+  changeFooterHeinThanth();
 };
 
-$(document).ready(function () {
-  toggleSwipe();
+$(window).on("load", function () {
+  $(document).trigger("launched");
+});
+$(document).on("launched", function () {
+  monitorHacks();
 });
 $(window).resize(function () {
-  toggleSwipe();
+  monitorHacks();
 });
-$(document).on('click', '.allow-swipe', function () {
+$(document).on("click", ".allow-swipe", function () {
   if ($nav.attr("data-expanded") == "true") {
     closeSideNav();
   }
 });
-$('#main-content').swipe({
+$main.swipe({
   swipeRight: function swipeRight() {
     if ($nav.attr("data-expanded") == "false") {
       openSideNav();
@@ -19377,11 +19429,76 @@ $('#main-content').swipe({
     }
   }
 });
-$("main").scroll(function (e) {
+
+window.setScrollProgress = function () {
   var winScroll = document.getElementById("main-content").scrollTop;
   var height = document.getElementById("main-content").scrollHeight - document.getElementById("main-content").clientHeight;
-  var scrolled = winScroll / height * 100;
-  $(".h3x-page-scroll-progress").css("width", "".concat(scrolled, "%"));
+
+  if (height > 0) {
+    var scrolled = winScroll / height * 100;
+    $(".h3x-page-scroll-progress").css("width", "".concat(scrolled, "%"));
+  } else {
+    $(".h3x-page-scroll-progress").css("width", "0%");
+  }
+};
+
+$("main").scroll(setScrollProgress);
+
+window.hideContent = function () {
+  $main.animate({
+    opacity: 0
+  }, 500, function () {
+    $main.css("visibility", "hidden");
+  });
+};
+
+window.showContent = function () {
+  $main.css("visibility", "visible");
+  $main.animate({
+    opacity: 1
+  }, 1000, function () {
+    $(document).trigger("launched");
+    closeSideNav();
+  });
+};
+
+window.hackBrowser = function ($title, $url) {
+  history.pushState(null, $title, $url);
+  document.title = $title;
+};
+
+window.changeContent = function ($url) {
+  hideContent();
+  setTimeout(function () {
+    $mountpoint.load("".concat($url, " #root"), function (response, status, xhr) {
+      var $title = "";
+
+      if (xhr.status == 200) {
+        $redirect = $(response).filter("meta[name='redirected-to']").attr("content");
+        $title = $(response).filter("title").text();
+
+        if ($redirect) {
+          $url = $redirect;
+        }
+
+        hackBrowser($title, $url);
+        showContent();
+      } else if (xhr.status == 404) {
+        $mountpoint.html();
+      }
+    });
+  }, 500);
+};
+
+$(document).on("click", "a[target!='_blank']", function (e) {
+  e.preventDefault();
+  var $anchor = $(e.target);
+
+  if ($anchor.attr("data-render-me") == "true") {
+    changeContent($anchor.attr("href"));
+  } else {
+    document.location = $anchor.attr("href");
+  }
 });
 
 /***/ }),

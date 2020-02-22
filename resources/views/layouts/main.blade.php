@@ -15,6 +15,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
+    @if(session('redirect'))
+        <meta name="redirected-to" content="{{ session('redirect') }}">
+    @endif
+
     <title>{{ isset($pagetitle) ? "$pagetitle - Hein Thanth" : "Hein Thanth" }}</title>
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Nunito:400,600|Megrim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -24,16 +28,17 @@
     <div class="h3x-wrapper">
         <div class="h3x-page-scroll-progress"></div>
         <header class="h3x-navbar">
-            <a href="{{ route('home') }}" class="h3x-navbar-logo">H31N TH4NTH</a>
+            <a href="{{ route('home') }}" class="h3x-navbar-logo" data-render-me="true">H31N TH4NTH</a>
             <button class="h3x-sidenav-toggler" id="h3x-sidenav-toggler">
                 <span class="h3x-sidenav-toggler-icon"></span>
             </button>
         </header>
         <nav class="h3x-side-nav" id="h3x-side-nav" data-expanded="false">
             <ul>
-                <li class="h3x-side-nav-item"><a href="#">ABOUT</a></li>
-                <li class="h3x-side-nav-item"><a href="#">SKILLS</a></li>
-                <li class="h3x-side-nav-item"><a href="#">PORTFOLIO</a></li>
+                <li class="h3x-side-nav-item"><a href="{{ route('home') }}" data-render-me="true">HOME</a></li>
+                <li class="h3x-side-nav-item"><a href="{{ route('about') }}" data-render-me="true">ABOUT</a></li>
+                <li class="h3x-side-nav-item"><a href="{{ route('skills') }}" data-render-me="true">SKILLS</a></li>
+                <li class="h3x-side-nav-item"><a href="/portfolio" data-render-me="true">PORTFOLIO</a></li>
                 <li class="h3x-side-nav-item"><a href="#">BLOG</a></li>
                 <li class="h3x-side-nav-item"><a href="#">CONTACT</a></li>
                 <li class="h3x-side-nav-item"><a href="#">SETTING</a></li>
@@ -41,8 +46,12 @@
             <div class="h3x-side-nav-divider"></div>
         </nav>
         <main id="main-content">
-            @yield('main-content')
-            <footer>&copy; {{ date('Y') }} Hein Thanth. All rights reserved</footer>
+            <div id="mountpoint">
+                <div id="root">
+                    @yield('main-content')
+                </div>
+            </div>
+            <footer><span class="h3x-svg-font"><img src="{{ asset('icons/cc.svg') }}" alt="Creative Common"></span> {{ date('Y') }} <span class="h3x-ht-changeable">Hein Thanth</span>. <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a></footer>
         </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

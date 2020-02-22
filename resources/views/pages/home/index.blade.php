@@ -66,6 +66,7 @@
         <li><a href="#" title="Twitter"><span class="ion-social-twitter"></span></a></li>
         <li><a href="#" title="Github"><span class="ion-social-github"></span></a></li>
         <li><a href="#" title="Hack The Box"><span class="ion-cube"></span></a></li>
+        <li><a href="#" title="Email"><span class="ion-android-mail"></span></a></li>
     </ul>
 </section>
 @endsection

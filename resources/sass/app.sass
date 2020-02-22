@@ -11,7 +11,7 @@ $lg: 992px
 
 html
     height: 100%
-    min-width: 300px
+    min-width: 350px
     width: 100%
 
 body
@@ -26,9 +26,9 @@ body
 a
     text-decoration: none
     color: #000000
-    @media (max-width: $lg)
-        -webkit-tap-highlight-color: transparent
-        outline: none
+    outline: none
+    @media (min-width: $lg)
+        outline: unset
         color: #555555
         &:hover
             color: #000000
@@ -109,12 +109,11 @@ footer
     height: 100%
     overflow-y: scroll
     transition: 0.5s
-    @media (min-height: 370px)
+    @media (min-height: 450px)
         overflow-y: hidden
         display: flex
         align-items: center
         justify-content: space-between
-    @media (min-height: 450px)
         padding-top: 0
     ul
         list-style-type: none
@@ -128,7 +127,7 @@ footer
         width: 0px
         height: 0px
         border: 0.5px solid #333333
-        @media (max-height: 369.999999999999px)
+        @media (max-height: 449.9999999999px)
             display: none
 
 .h3x-text-muted
@@ -145,6 +144,15 @@ footer
 
 .h3x-section-divider
     margin: 10px 0px
+
+.h3x-svg-font 
+    display: inline-flex
+    align-self: center
+    svg, img
+        height: 1em
+        width: 1em
+        top: .125em
+        position: relative
 
 .h3x-d-inline-block
     display: inline-block!important
@@ -201,3 +209,10 @@ footer
         display: inline-block
         font-size: 30px
         padding: 0px 10px
+
+.h3x-fake-footer
+    padding: 0px 24px 16px
+    position: absolute
+    bottom: 0px
+    left: 0px
+    width: 100%
