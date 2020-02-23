@@ -13,6 +13,3 @@
 
 Route::get('/', 'PagesController@home')->name('home');
 Route::get('/skills', 'PagesController@skills')->name('skills');
-Route::get('/about', function() {
-    return redirect('/skills')->with(['redirect' => "/skills"]);
-})->name('about');

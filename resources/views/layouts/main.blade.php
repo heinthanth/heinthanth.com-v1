@@ -36,16 +36,16 @@
         <nav class="h3x-side-nav" id="h3x-side-nav" data-expanded="false">
             <ul>
                 <li class="h3x-side-nav-item"><a href="{{ route('home') }}" data-render-me="true">HOME</a></li>
-                <li class="h3x-side-nav-item"><a href="{{ route('about') }}" data-render-me="true">ABOUT</a></li>
+                <li class="h3x-side-nav-item"><a href="#" data-render-me="true">ABOUT</a></li>
                 <li class="h3x-side-nav-item"><a href="{{ route('skills') }}" data-render-me="true">SKILLS</a></li>
-                <li class="h3x-side-nav-item"><a href="/portfolio" data-render-me="true">PORTFOLIO</a></li>
-                <li class="h3x-side-nav-item"><a href="#">BLOG</a></li>
-                <li class="h3x-side-nav-item"><a href="#">CONTACT</a></li>
-                <li class="h3x-side-nav-item"><a href="#">SETTING</a></li>
+                <li class="h3x-side-nav-item"><a href="#" data-render-me="true">PORTFOLIO</a></li>
+                <li class="h3x-side-nav-item"><a href="#" data-render-me="true">BLOG</a></li>
+                <li class="h3x-side-nav-item"><a href="#" data-render-me="true">CONTACT</a></li>
+                <li class="h3x-side-nav-item"><a href="#" data-render-me="true">SETTING</a></li>
             </ul>
             <div class="h3x-side-nav-divider"></div>
         </nav>
-        <main id="main-content">
+        <main id="main-content" data-render-state="show">
             <div id="mountpoint">
                 <div id="root">
                     @yield('main-content')

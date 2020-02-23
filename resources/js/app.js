@@ -184,63 +184,89 @@ window.setScrollProgress = () => {
 
 $("main").scroll(setScrollProgress);
 
-window.hideContent = () => {
-    $main.animate(
-        {
-            opacity: 0
-        },
-        500,
-        () => {
-            $main.css("visibility", "hidden");
-        }
-    );
-};
-
-window.showContent = () => {
-    $main.css("visibility", "visible");
-    $main.animate(
-        {
-            opacity: 1
-        },
-        1000,
-        () => {
-            $(document).trigger("launched");
-            closeSideNav();
-        }
-    );
-};
-
-window.hackBrowser = ($title, $url) => {
-    history.pushState(null, $title, $url);
-    document.title = $title;
-}
-
-window.changeContent = $url => {
-    hideContent();
-    setTimeout(() => {
-        $mountpoint.load(`${$url} #root`, (response, status, xhr) => {
-            let $title = "";
-            if(xhr.status == 200) {
-                $redirect = $(response).filter("meta[name='redirected-to']").attr("content");
-                $title = $(response).filter("title").text()
-                if($redirect) {
-                    $url = $redirect
+window.hidePage = (callback = null) => {
+    if ($main.attr("data-render-state") != "hide") {
+        if ($main.css("opacity") != 0) {
+            $main.animate(
+                {
+                    opacity: 0
+                },
+                500,
+                () => {
+                    $main.css("visibility", "hidden");
+                    $main.attr("data-render-state", "hide");
+                    if (typeof callback !== undefined) {
+                        callback();
+                    }
                 }
-                hackBrowser($title, $url);
-                showContent();
-            } else if (xhr.status == 404) {
-                $mountpoint.html();
+            );
+        } else {
+            $main.css("visibility", "hidden");
+            $main.attr("data-render-state", "hide");
+            if (typeof callback !== undefined) {
+                callback();
             }
+        }
+    } else {
+        if (typeof callback !== undefined) {
+            callback();
+        }
+    }
+};
+
+window.showPage = () => {
+    if ($main.attr("data-render-state") != "show") {
+        $main.css("visibility", "visible");
+        if ($main.css("opacity") != 1) {
+            $main.animate(
+                {
+                    opacity: 1
+                },
+                1000,
+                () => {
+                    $main.attr("data-render-state", "show");
+                }
+            );
+        } else {
+            $main.attr("data-render-state", "show");
+        }
+    }
+};
+
+window.hackPage = ($url, $shouldPushHistroy = true) => {
+    hidePage(() => {
+        $mountpoint.load(`${$url} #root`, (response, status, xhr) => {
+            $redirect = $(response)
+                .filter("meta[name='redirected-to']")
+                .attr("content");
+            $title = $(response)
+                .filter("title")
+                .text();
+            if ($redirect) {
+                $url = $redirect;
+            }
+            document.title = $title;
+            if ($shouldPushHistroy) {
+                history.pushState(null, $title, $url);
+            }
+            showPage();
         });
-    }, 500);
+    });
 };
 
 $(document).on("click", "a[target!='_blank']", e => {
     e.preventDefault();
+
     let $anchor = $(e.target);
+    let $url = $anchor.attr("href");
+
     if ($anchor.attr("data-render-me") == "true") {
-        changeContent($anchor.attr("href"));
+        hackPage($url);
     } else {
-        document.location = $anchor.attr("href");
+        document.location = $url;
     }
+});
+
+$(window).on("popstate", () => {
+    hackPage(document.location.href, false);
 });

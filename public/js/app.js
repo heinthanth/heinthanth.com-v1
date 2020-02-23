@@ -19281,6 +19281,8 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /**
  * First, we will load all of this project's Javascript utilities and other
  * dependencies. Then, we will be ready to develop a robust and powerful
@@ -19444,61 +19446,87 @@ window.setScrollProgress = function () {
 
 $("main").scroll(setScrollProgress);
 
-window.hideContent = function () {
-  $main.animate({
-    opacity: 0
-  }, 500, function () {
-    $main.css("visibility", "hidden");
-  });
-};
+window.hidePage = function () {
+  var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-window.showContent = function () {
-  $main.css("visibility", "visible");
-  $main.animate({
-    opacity: 1
-  }, 1000, function () {
-    $(document).trigger("launched");
-    closeSideNav();
-  });
-};
+  if ($main.attr("data-render-state") != "hide") {
+    if ($main.css("opacity") != 0) {
+      $main.animate({
+        opacity: 0
+      }, 500, function () {
+        $main.css("visibility", "hidden");
+        $main.attr("data-render-state", "hide");
 
-window.hackBrowser = function ($title, $url) {
-  history.pushState(null, $title, $url);
-  document.title = $title;
-};
-
-window.changeContent = function ($url) {
-  hideContent();
-  setTimeout(function () {
-    $mountpoint.load("".concat($url, " #root"), function (response, status, xhr) {
-      var $title = "";
-
-      if (xhr.status == 200) {
-        $redirect = $(response).filter("meta[name='redirected-to']").attr("content");
-        $title = $(response).filter("title").text();
-
-        if ($redirect) {
-          $url = $redirect;
+        if (_typeof(callback) !== undefined) {
+          callback();
         }
+      });
+    } else {
+      $main.css("visibility", "hidden");
+      $main.attr("data-render-state", "hide");
 
-        hackBrowser($title, $url);
-        showContent();
-      } else if (xhr.status == 404) {
-        $mountpoint.html();
+      if (_typeof(callback) !== undefined) {
+        callback();
       }
+    }
+  } else {
+    if (_typeof(callback) !== undefined) {
+      callback();
+    }
+  }
+};
+
+window.showPage = function () {
+  if ($main.attr("data-render-state") != "show") {
+    $main.css("visibility", "visible");
+
+    if ($main.css("opacity") != 1) {
+      $main.animate({
+        opacity: 1
+      }, 1000, function () {
+        $main.attr("data-render-state", "show");
+      });
+    } else {
+      $main.attr("data-render-state", "show");
+    }
+  }
+};
+
+window.hackPage = function ($url) {
+  var $shouldPushHistroy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  hidePage(function () {
+    $mountpoint.load("".concat($url, " #root"), function (response, status, xhr) {
+      $redirect = $(response).filter("meta[name='redirected-to']").attr("content");
+      $title = $(response).filter("title").text();
+
+      if ($redirect) {
+        $url = $redirect;
+      }
+
+      document.title = $title;
+
+      if ($shouldPushHistroy) {
+        history.pushState(null, $title, $url);
+      }
+
+      showPage();
     });
-  }, 500);
+  });
 };
 
 $(document).on("click", "a[target!='_blank']", function (e) {
   e.preventDefault();
   var $anchor = $(e.target);
+  var $url = $anchor.attr("href");
 
   if ($anchor.attr("data-render-me") == "true") {
-    changeContent($anchor.attr("href"));
+    hackPage($url);
   } else {
-    document.location = $anchor.attr("href");
+    document.location = $url;
   }
+});
+$(window).on("popstate", function () {
+  hackPage(document.location.href, false);
 });
 
 /***/ }),
