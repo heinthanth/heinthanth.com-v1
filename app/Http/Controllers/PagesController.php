@@ -19,4 +19,10 @@ class PagesController extends Controller
             'pagetitle' => "Skills"
         ]);
     }
+
+    public function about() {
+        return view('pages.home.about')->with([
+            'pagetitle' => "About"
+        ]);
+    }
 }

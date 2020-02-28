@@ -65,6 +65,27 @@ p {
   padding: 8px 16px;
   display: flex;
   align-items: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (min-width: 576px) and (max-width: 767.99999px) {
+  .h3x-navbar {
+    max-width: 576px;
+    margin: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.99999px) {
+  .h3x-navbar {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 992px) {
+  .h3x-navbar {
+    width: 1000px;
+  }
 }
 
 .h3x-navbar .h3x-navbar-logo {
@@ -100,7 +121,37 @@ p {
 .h3x-wrapper {
   height: 100%;
   width: 100%;
+  overflow: hidden;
+  margin: auto auto;
+}
+
+@media (min-width: 992px) {
+  .h3x-wrapper {
+    max-width: 1000px;
+  }
+}
+
+#main-container {
+  height: 100%;
+  width: 100%;
   overflow-x: hidden;
+}
+
+@media (min-width: 992px) {
+  #main-container {
+    display: flex;
+  }
+
+  #main-container nav {
+    flex: 20%;
+    width: unset;
+    position: relative;
+    font-size: 20px;
+  }
+
+  #main-container main {
+    flex: 80%;
+  }
 }
 
 main {
@@ -109,6 +160,25 @@ main {
   height: 100%;
   margin-left: 0;
   transition: transform 0.5s;
+}
+
+@media (min-width: 576px) {
+  main {
+    margin: auto;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.99999px) {
+  main {
+    max-width: 576px;
+    margin: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.99999px) {
+  main {
+    max-width: 768px;
+  }
 }
 
 footer {
@@ -172,6 +242,10 @@ footer {
   .h3x-side-nav .h3x-side-nav-divider {
     display: none;
   }
+}
+
+.h3x-font-weight-bold {
+  font-weight: 700 !important;
 }
 
 .h3x-text-muted {

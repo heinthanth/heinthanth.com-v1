@@ -25,8 +25,7 @@ window.openSideNav = () => {
             $(".h3x-side-nav-divider").height() == 0
         ) {
             setTimeout(() => {
-                $(".h3x-side-nav-divider").animate(
-                    {
+                $(".h3x-side-nav-divider").animate({
                         height: "80%"
                     },
                     500
@@ -43,8 +42,7 @@ window.closeSideNav = () => {
             window.innerHeight > $minHeight &&
             $(".h3x-side-nav-divider").height() > 1
         ) {
-            $(".h3x-side-nav-divider").animate(
-                {
+            $(".h3x-side-nav-divider").animate({
                     height: 0
                 },
                 500,
@@ -187,8 +185,7 @@ $("main").scroll(setScrollProgress);
 window.hidePage = (callback = null) => {
     if ($main.attr("data-render-state") != "hide") {
         if ($main.css("opacity") != 0) {
-            $main.animate(
-                {
+            $main.animate({
                     opacity: 0
                 },
                 500,
@@ -214,21 +211,26 @@ window.hidePage = (callback = null) => {
     }
 };
 
-window.showPage = () => {
+window.showPage = (callback) => {
     if ($main.attr("data-render-state") != "show") {
         $main.css("visibility", "visible");
         if ($main.css("opacity") != 1) {
-            $main.animate(
-                {
+            $main.animate({
                     opacity: 1
                 },
                 1000,
                 () => {
                     $main.attr("data-render-state", "show");
+                    if (typeof callback !== undefined) {
+                        callback();
+                    }
                 }
             );
         } else {
             $main.attr("data-render-state", "show");
+            if (typeof callback !== undefined) {
+                callback();
+            }
         }
     }
 };
@@ -249,7 +251,7 @@ window.hackPage = ($url, $shouldPushHistroy = true) => {
             if ($shouldPushHistroy) {
                 history.pushState(null, $title, $url);
             }
-            showPage();
+            showPage(closeSideNav);
         });
     });
 };

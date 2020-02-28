@@ -3,6 +3,7 @@ $_FontPrimary: 'Nunito', sans-serif
 $_ColorMuted: #6c757d
 $_BackgroundThemePrimary: #f2f7f8
 
+$sm: 576px
 $md: 768px
 $lg: 992px
 
@@ -53,6 +54,15 @@ h1, h2, h3, h4, h5, h6, p
     padding: 8px 16px
     display: flex
     align-items: center
+    left: 50%
+    transform: translateX(-50%)
+    @media (min-width: $sm) and (max-width: 767.99999px)
+        max-width: $sm
+        margin: auto
+    @media (min-width: $md) and (max-width: 991.99999px)
+        max-width: $md
+    @media (min-width: $lg)
+        width: 1000px
     .h3x-navbar-logo
         color: #000000
         font-weight: 500
@@ -77,7 +87,24 @@ h1, h2, h3, h4, h5, h6, p
 .h3x-wrapper
     height: 100%
     width: 100%
+    overflow: hidden
+    margin: auto auto
+    @media (min-width: $lg)
+        max-width: 1000px
+
+#main-container
+    height: 100%
+    width: 100%
     overflow-x: hidden
+    @media (min-width: $lg)
+        display: flex
+        nav
+            flex: 20%
+            width: unset
+            position: relative
+            font-size: 20px
+        main
+            flex: 80%
 
 main
     padding: calc( #{$_NavBarHeight} + 16px) 24px 16px
@@ -85,6 +112,13 @@ main
     height: 100%
     margin-left: 0
     transition: transform 0.5s
+    @media (min-width: $sm)
+        margin: auto
+    @media (min-width: $sm) and (max-width: 767.99999px)
+        max-width: $sm
+        margin: auto
+    @media (min-width: $md) and (max-width: 991.99999px)
+        max-width: $md
 
 footer
     margin-top: 8px
@@ -130,6 +164,8 @@ footer
         @media (max-height: 449.9999999999px)
             display: none
 
+.h3x-font-weight-bold
+    font-weight: 700!important
 .h3x-text-muted
     color: $_ColorMuted!important
 
@@ -145,7 +181,7 @@ footer
 .h3x-section-divider
     margin: 10px 0px
 
-.h3x-svg-font 
+.h3x-svg-font
     display: inline-flex
     align-self: center
     svg, img
@@ -191,24 +227,24 @@ footer
     padding: 30px 0px 10px
     .h3x-article-preview-image
         border-radius: 5px
-        width:100%
+        width: 100%
 
 .h3x-project-preview
     padding: 30px 0px 10px
     .h3x-project-preview-image
         border-radius: 5px
-        width:100%
+        width: 100%
 
 .h3x-contact-social-link
     padding: 20px 0px 10px
     list-style: none
     margin: 0px
     li
-        &:first-of-type
-            padding-left: 0px
         display: inline-block
         font-size: 30px
         padding: 0px 10px
+        &:first-of-type
+            padding-left: 0px
 
 .h3x-fake-footer
     padding: 0px 24px 16px

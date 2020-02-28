@@ -61,12 +61,7 @@
     <h1 class="h3x-section-title">GET IN TOUCH WITH ME</h1>
     <p>You can use <a href="#" class="h3x-more-info-link"> this form</a> to contact with me! Or reach me via - </p>
     <ul class="h3x-contact-social-link">
-        <li><a href="#" title="Facebook"><span class="ion-social-facebook"></span></a></li>
-        <li><a href="#" title="Instagram"><span class="ion-social-instagram"></span></a></li>
-        <li><a href="#" title="Twitter"><span class="ion-social-twitter"></span></a></li>
-        <li><a href="#" title="Github"><span class="ion-social-github"></span></a></li>
-        <li><a href="#" title="Hack The Box"><span class="ion-cube"></span></a></li>
-        <li><a href="#" title="Email"><span class="ion-android-mail"></span></a></li>
+        @include('includes.social')
     </ul>
 </section>
 @endsection

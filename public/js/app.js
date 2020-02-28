@@ -19476,7 +19476,7 @@ window.hidePage = function () {
   }
 };
 
-window.showPage = function () {
+window.showPage = function (callback) {
   if ($main.attr("data-render-state") != "show") {
     $main.css("visibility", "visible");
 
@@ -19485,9 +19485,17 @@ window.showPage = function () {
         opacity: 1
       }, 1000, function () {
         $main.attr("data-render-state", "show");
+
+        if (_typeof(callback) !== undefined) {
+          callback();
+        }
       });
     } else {
       $main.attr("data-render-state", "show");
+
+      if (_typeof(callback) !== undefined) {
+        callback();
+      }
     }
   }
 };
@@ -19509,7 +19517,7 @@ window.hackPage = function ($url) {
         history.pushState(null, $title, $url);
       }
 
-      showPage();
+      showPage(closeSideNav);
     });
   });
 };
@@ -19594,8 +19602,8 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/portfolio/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/portfolio/resources/sass/app.sass */"./resources/sass/app.sass");
+__webpack_require__(/*! /var/www/heinthanth/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/heinthanth/resources/sass/app.sass */"./resources/sass/app.sass");
 
 
 /***/ })
