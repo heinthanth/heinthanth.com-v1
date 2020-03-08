@@ -55,7 +55,7 @@
 </section> --}}
 <section id="contact" class="h3x-section">
     <h1 class="h3x-section-title">GET IN TOUCH WITH ME</h1>
-    <p>You can use <a href="#" class="h3x-more-info-link"> this form</a> to contact with me! Or reach me via - </p>
+    <p>{{-- You can use <a href="#" class="h3x-more-info-link"> this form</a> to contact with me! Or --}}reach me via - </p>
     <ul class="h3x-contact-social-link">
         @include('includes.social')
     </ul>
