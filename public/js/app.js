@@ -19290,6 +19290,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./utils */ "./resources/js/utils.js");
+
 var $SideBarWidth = 250;
 var $nav = $(".h3x-side-nav");
 var $main = $("#main-content");
@@ -19357,11 +19359,42 @@ window.toggleSwipe = function () {
   }
 };
 
+window.animateSkillBar = function () {
+  $(".h3x-skill").each(function (i, elem) {
+    var $percent = $(elem).find(".h3x-skill-progress").attr("data-percent");
+    var $label = $(elem).find(".h3x-skill-progress-label");
+    var $skillbar = $(elem).find(".h3x-skill-progress").animate({
+      width: $percent
+    }, {
+      duration: 2000,
+      step: function step(now, fx) {
+        $label.text("".concat(Math.floor(now), " %"));
+      }
+    });
+  });
+};
+
+window.hackSkillBar = function () {
+  var $skillbar = document.getElementById("skill-container");
+  height = window.innerHeight;
+
+  if ($($skillbar).length) {
+    pos = $skillbar.getBoundingClientRect().top;
+
+    if ($skillbar.getAttribute("data-animated") != "true") {
+      if (pos < height / 2) {
+        animateSkillBar();
+        $skillbar.setAttribute("data-animated", "true");
+      }
+    }
+  }
+};
+
 window.hackFooter = function () {
   var height = document.getElementById("main-content").scrollHeight - document.getElementById("main-content").clientHeight;
 
   if (height <= 0) {
-    if (!$main.has(".h3x-fake-footer").length) {
+    if (!$(".h3x-fake-footer").length) {
       $main.append("<div class=\"h3x-active-footer h3x-fake-footer\">".concat($("footer").html(), "</div>"));
     }
 
@@ -19406,9 +19439,9 @@ window.monitorHacks = function () {
 };
 
 $(window).on("load", function () {
-  $(document).trigger("launched");
+  $(window).trigger("launched");
 });
-$(document).on("launched", function () {
+$(window).on("launched", function () {
   monitorHacks();
 });
 $(window).resize(function () {
@@ -19444,7 +19477,10 @@ window.setScrollProgress = function () {
   }
 };
 
-$("main").scroll(setScrollProgress);
+$("main").scroll(function () {
+  setScrollProgress();
+  hackSkillBar();
+});
 
 window.hidePage = function () {
   var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
@@ -19476,7 +19512,13 @@ window.hidePage = function () {
   }
 };
 
-window.showPage = function (callback) {
+window.resetScroll = function () {
+  document.getElementById("main-content").scrollTop = 0;
+};
+
+window.showPage = function () {
+  var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
   if ($main.attr("data-render-state") != "show") {
     $main.css("visibility", "visible");
 
@@ -19504,6 +19546,12 @@ window.hackPage = function ($url) {
   var $shouldPushHistroy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   hidePage(function () {
     $mountpoint.load("".concat($url, " #root"), function (response, status, xhr) {
+      if (status == "error") {
+        $html = $(response);
+        $maincontent = $html.find("#root").html();
+        $mountpoint.html($maincontent);
+      }
+
       $redirect = $(response).filter("meta[name='redirected-to']").attr("content");
       $title = $(response).filter("title").text();
 
@@ -19517,6 +19565,7 @@ window.hackPage = function ($url) {
         history.pushState(null, $title, $url);
       }
 
+      $(window).trigger("launched");
       showPage(closeSideNav);
     });
   });
@@ -19525,16 +19574,28 @@ window.hackPage = function ($url) {
 $(document).on("click", "a[target!='_blank']", function (e) {
   e.preventDefault();
   var $anchor = $(e.target);
-  var $url = $anchor.attr("href");
+  var $url = $anchor.attr("href"); // reset active
+
+  $(".h3x-side-nav-item").each(function (i, elem) {
+    $(elem).children("a").removeClass("active");
+  });
 
   if ($anchor.attr("data-render-me") == "true") {
-    hackPage($url);
+    if (document.location.href != $url) {
+      hackPage($url);
+      $anchor.addClass("active");
+    } else {
+      closeSideNav();
+    }
   } else {
     document.location = $url;
   }
 });
 $(window).on("popstate", function () {
   hackPage(document.location.href, false);
+});
+$(window).on('launched', function () {
+  resetScroll();
 });
 
 /***/ }),
@@ -19581,6 +19642,26 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/utils.js":
+/*!*******************************!*\
+  !*** ./resources/js/utils.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.warnXSS = function () {
+  console.info('%cStop!', 'font-weight: bold; font-size: 55px; color: red; text-shadow: 1px 1px #000000');
+  console.info('%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to "hack" a website or admin account, it is a scam and will give them access to yours!. Learn more about "self-xss" at https://en.wikipedia.org/wiki/Self-XSS', 'font-size: 17px; margin-bottom: 10px');
+  console.info('%cDon\'t be a Script Kiddie!', 'font-size: 16px;');
+};
+
+$(window).on('launched', function () {
+  console.clear();
+  warnXSS();
+});
 
 /***/ }),
 

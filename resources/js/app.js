@@ -5,6 +5,7 @@
  */
 
 require("./bootstrap");
+require("./utils");
 
 let $SideBarWidth = 250;
 let $nav = $(".h3x-side-nav");
@@ -25,7 +26,8 @@ window.openSideNav = () => {
             $(".h3x-side-nav-divider").height() == 0
         ) {
             setTimeout(() => {
-                $(".h3x-side-nav-divider").animate({
+                $(".h3x-side-nav-divider").animate(
+                    {
                         height: "80%"
                     },
                     500
@@ -42,7 +44,8 @@ window.closeSideNav = () => {
             window.innerHeight > $minHeight &&
             $(".h3x-side-nav-divider").height() > 1
         ) {
-            $(".h3x-side-nav-divider").animate({
+            $(".h3x-side-nav-divider").animate(
+                {
                     height: 0
                 },
                 500,
@@ -82,12 +85,48 @@ window.toggleSwipe = () => {
     }
 };
 
+window.animateSkillBar = () => {
+    $(".h3x-skill").each((i, elem) => {
+        var $percent = $(elem)
+            .find(".h3x-skill-progress")
+            .attr("data-percent");
+        var $label = $(elem).find(".h3x-skill-progress-label");
+        var $skillbar = $(elem)
+            .find(".h3x-skill-progress")
+            .animate(
+                {
+                    width: $percent
+                },
+                {
+                    duration: 2000,
+                    step: (now, fx) => {
+                        $label.text(`${Math.floor(now)} %`);
+                    }
+                }
+            );
+    });
+};
+
+window.hackSkillBar = () => {
+    var $skillbar = document.getElementById("skill-container");
+    height = window.innerHeight;
+    if ($($skillbar).length) {
+        pos = $skillbar.getBoundingClientRect().top;
+        if ($skillbar.getAttribute("data-animated") != "true") {
+            if (pos < height / 2) {
+                animateSkillBar();
+                $skillbar.setAttribute("data-animated", "true");
+            }
+        }
+    }
+};
+
 window.hackFooter = () => {
     var height =
         document.getElementById("main-content").scrollHeight -
         document.getElementById("main-content").clientHeight;
     if (height <= 0) {
-        if (!$main.has(".h3x-fake-footer").length) {
+        if (!$(".h3x-fake-footer").length) {
             $main.append(
                 `<div class="h3x-active-footer h3x-fake-footer">${$(
                     "footer"
@@ -137,10 +176,10 @@ window.monitorHacks = () => {
 };
 
 $(window).on("load", () => {
-    $(document).trigger("launched");
+    $(window).trigger("launched");
 });
 
-$(document).on("launched", () => {
+$(window).on("launched", () => {
     monitorHacks();
 });
 
@@ -180,12 +219,16 @@ window.setScrollProgress = () => {
     }
 };
 
-$("main").scroll(setScrollProgress);
+$("main").scroll(() => {
+    setScrollProgress();
+    hackSkillBar();
+});
 
 window.hidePage = (callback = null) => {
     if ($main.attr("data-render-state") != "hide") {
         if ($main.css("opacity") != 0) {
-            $main.animate({
+            $main.animate(
+                {
                     opacity: 0
                 },
                 500,
@@ -211,11 +254,16 @@ window.hidePage = (callback = null) => {
     }
 };
 
-window.showPage = (callback) => {
+window.resetScroll = () => {
+    document.getElementById("main-content").scrollTop = 0;
+};
+
+window.showPage = (callback = null) => {
     if ($main.attr("data-render-state") != "show") {
         $main.css("visibility", "visible");
         if ($main.css("opacity") != 1) {
-            $main.animate({
+            $main.animate(
+                {
                     opacity: 1
                 },
                 1000,
@@ -238,6 +286,11 @@ window.showPage = (callback) => {
 window.hackPage = ($url, $shouldPushHistroy = true) => {
     hidePage(() => {
         $mountpoint.load(`${$url} #root`, (response, status, xhr) => {
+            if(status == "error") {
+                $html = $(response);
+                $maincontent = $html.find("#root").html();
+                $mountpoint.html($maincontent);
+            }
             $redirect = $(response)
                 .filter("meta[name='redirected-to']")
                 .attr("content");
@@ -251,6 +304,7 @@ window.hackPage = ($url, $shouldPushHistroy = true) => {
             if ($shouldPushHistroy) {
                 history.pushState(null, $title, $url);
             }
+            $(window).trigger("launched");
             showPage(closeSideNav);
         });
     });
@@ -262,8 +316,20 @@ $(document).on("click", "a[target!='_blank']", e => {
     let $anchor = $(e.target);
     let $url = $anchor.attr("href");
 
+    // reset active
+    $(".h3x-side-nav-item").each((i, elem) => {
+        $(elem)
+            .children("a")
+            .removeClass("active");
+    });
+
     if ($anchor.attr("data-render-me") == "true") {
-        hackPage($url);
+        if (document.location.href != $url) {
+            hackPage($url);
+            $anchor.addClass("active");
+        } else {
+            closeSideNav();
+        }
     } else {
         document.location = $url;
     }
@@ -271,4 +337,8 @@ $(document).on("click", "a[target!='_blank']", e => {
 
 $(window).on("popstate", () => {
     hackPage(document.location.href, false);
+});
+
+$(window).on('launched', () => {
+    resetScroll();
 });

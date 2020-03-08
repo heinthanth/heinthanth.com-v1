@@ -19,6 +19,29 @@ body {
   line-height: 1.8rem;
 }
 
+@media (min-width: 992px) {
+  body {
+    /* Handle */
+    /* Handle on hover */
+  }
+
+  body ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  body ::-webkit-scrollbar-track {
+    background: #f2f7f8;
+  }
+
+  body ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  body ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
 a {
   text-decoration: none;
   color: #000000;
@@ -51,6 +74,10 @@ h5,
 h6,
 p {
   margin-bottom: 0px;
+}
+
+.h3x-color-black {
+  color: #000000 !important;
 }
 
 .h3x-navbar {
@@ -155,29 +182,40 @@ p {
 }
 
 main {
-  padding: calc( 60px + 16px) 24px 16px;
+  padding: 16px 24px;
+  margin-top: 60px;
   overflow-y: scroll;
-  height: 100%;
+  height: calc( 100% - 60px);
   margin-left: 0;
+  position: relative;
   transition: transform 0.5s;
 }
 
 @media (min-width: 576px) {
   main {
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 @media (min-width: 576px) and (max-width: 767.99999px) {
   main {
     max-width: 576px;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991.99999px) {
   main {
     max-width: 768px;
+  }
+}
+
+@media (min-width: 992px) {
+  main {
+    height: calc( 100% - 80px);
+    margin-bottom: 20px;
   }
 }
 
@@ -285,6 +323,14 @@ footer {
   display: inline-block !important;
 }
 
+.h3x-section {
+  margin-bottom: 40px;
+}
+
+.h3x-section:last-child {
+  margin-bottom: 20px;
+}
+
 .h3x-section p {
   text-align: justify;
   color: #333333;
@@ -305,22 +351,18 @@ footer {
 }
 
 .h3x-more-info-link {
-  display: inline-block;
-  position: relative;
-  margin: 8px 0px;
+  border-bottom: 1px solid #000000;
   color: #000000;
   font-weight: 600;
 }
 
-.h3x-more-info-link::before {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  bottom: 10%;
-  left: 0px;
+.h3x-embeds {
   width: 100%;
-  height: 1px;
-  background-color: #000000;
+  margin: 20px 0px 10px;
+}
+
+.h3x-mb-20 {
+  margin-bottom: 20px;
 }
 
 .h3x-article-preview {
@@ -339,6 +381,40 @@ footer {
 .h3x-project-preview .h3x-project-preview-image {
   border-radius: 5px;
   width: 100%;
+}
+
+.h3x-skill-container {
+  margin: 20px 0px 40px;
+}
+
+.h3x-skill-container .h3x-skill {
+  margin: 10px 0px;
+}
+
+.h3x-skill-container .h3x-skill .h3x-skill-info {
+  font-size: 14px;
+  display: flex;
+  color: #555555;
+}
+
+.h3x-skill-container .h3x-skill .h3x-skill-info .h3x-skill-progress-label {
+  margin-left: auto;
+}
+
+.h3x-skill-container .h3x-skill .h3x-skill-bar {
+  width: 100%;
+  height: 5px;
+  position: relative;
+  border: 1px solid #000000;
+}
+
+.h3x-skill-container .h3x-skill .h3x-skill-bar .h3x-skill-progress {
+  width: 0%;
+  background: #000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
 }
 
 .h3x-contact-social-link {
@@ -363,5 +439,20 @@ footer {
   bottom: 0px;
   left: 0px;
   width: 100%;
+}
+
+.h3x-error-container .h3x-error-status {
+  margin: 0px 0px 40px;
+  font-size: 100px;
+}
+
+.h3x-error-container .h3x-error-info {
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  .h3x-error-container .h3x-error-info {
+    font-size: 24px;
+  }
 }
 

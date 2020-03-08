@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<!-- 
+
+STOP!
+
+This is a browser feature intended for developers. If someone told you to copy-paste something here to "hack" a website or admin account, it is a scam and will give them access to yours!. Learn more about "self-xss" at https://en.wikipedia.org/wiki/Self-XSS.
+
+Don't be a Script Kiddie!
+
+Best regards, H31iUMx49 (heinthanth)
+
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,12 +57,13 @@
                         @yield('main-content')
                     </div>
                 </div>
-                <footer><span class="h3x-svg-font"><img src="{{ asset('icons/cc.svg') }}" alt="Creative Common"></span> {{ date('Y') }} <span class="h3x-ht-changeable">Hein Thanth</span>. <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a></footer>
+                <footer><span class="h3x-svg-font"><img src="{{ asset('icons/cc.svg') }}" alt="Creative Common"></span> {{ date('Y') }} <span class="h3x-ht-changeable">Hein Thanth</span>. <a rel="license" class="h3x-color-black" href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a></footer>
             </main>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" integrity="sha256-ns1OeEP3SedE9Theqmu444I44sikbp1O+bF/6BNUUy0=" crossorigin="anonymous"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    @section('add-js')
 </body>
 </html>
