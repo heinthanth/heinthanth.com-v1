@@ -6,6 +6,7 @@
 
 require("./bootstrap");
 require("./utils");
+require("./special");
 
 let $SideBarWidth = 250;
 let $nav = $(".h3x-side-nav");
@@ -67,20 +68,6 @@ window.closeSideNav = () => {
                 width: 0
             });
             $nav.attr("data-expanded", "false");
-        }
-    }
-};
-
-window.toggleSwipe = () => {
-    if ($(window).width() < 992) {
-        if (!$main.hasClass("allow-swipe")) {
-            $main.addClass("allow-swipe");
-            $main.swipe("enable");
-        }
-    } else {
-        if ($main.hasClass("allow-swipe")) {
-            $main.removeClass("allow-swipe");
-            $main.swipe("disable");
         }
     }
 };
@@ -161,6 +148,7 @@ window.changeFooterHeinThanth = () => {
 };
 
 $(".h3x-sidenav-toggler").click(() => {
+    $(window).trigger("toggle-nav");
     if ($nav.attr("data-expanded") == "false") {
         openSideNav();
     } else {
@@ -169,7 +157,6 @@ $(".h3x-sidenav-toggler").click(() => {
 });
 
 window.monitorHacks = () => {
-    toggleSwipe();
     setScrollProgress();
     hackFooter();
     changeFooterHeinThanth();
@@ -183,26 +170,21 @@ $(window).on("launched", () => {
     monitorHacks();
 });
 
+$(window).on("toggle-nav", () => {
+    if ($nav.attr("data-expanded") == "false") {
+        $('.h3x-input-disable-on-nav').attr('disabled', true);
+    } else {
+        $('.h3x-input-disable-on-nav').attr('disabled', false);
+    }
+});
+
 $(window).resize(() => {
     monitorHacks();
 });
 
-$(document).on("click", ".allow-swipe", () => {
+$main.on('click', () => {
     if ($nav.attr("data-expanded") == "true") {
         closeSideNav();
-    }
-});
-
-$main.swipe({
-    swipeRight: () => {
-        if ($nav.attr("data-expanded") == "false") {
-            openSideNav();
-        }
-    },
-    swipeLeft: () => {
-        if ($nav.attr("data-expanded") == "true") {
-            closeSideNav();
-        }
     }
 });
 
@@ -333,6 +315,12 @@ $(document).on("click", "a[target!='_blank']", e => {
     } else {
         document.location = $url;
     }
+});
+
+$(document).on("click", ".h3x-reload-current", e => {
+    e.preventDefault();
+    console.log(document.location.href);
+    hackPage(document.location.href);
 });
 
 $(window).on("popstate", () => {

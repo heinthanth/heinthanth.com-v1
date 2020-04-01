@@ -14,3 +14,5 @@
 Route::get('/', 'PagesController@home')->name('home');
 Route::get('/about', 'PagesController@about')->name('about');
 Route::get('/skills', 'PagesController@skills')->name('skills');
+Route::get('/april-fool', 'PoppinController@april')->name('april-fool');
+Route::post('/april-fool/send-message', 'PoppinController@april_save_message');
