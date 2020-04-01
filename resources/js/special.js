@@ -37,7 +37,7 @@ window.AprilFoolMessageFormController = (e) => {
             }
         },
     });
-    return false
+    return false;
 }
 
 $('.h3x-ajax-form').on('submit', e => {

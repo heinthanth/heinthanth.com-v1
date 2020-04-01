@@ -4,7 +4,7 @@
 <section id="april-fool" class="h3x-section h3x-section-single">
     <h1 class="h3x-section-title">April Fool Message</h1>
     <p>Welcome, drop some messages, as April Fool, anonymously or not!</p>
-    <form id="AprilFoolMessageForm" class="h3x-form h3x-ajax-form" autocomplete="off">
+    <form id="AprilFoolMessageForm" class="h3x-form h3x-ajax-form" method="POST" autocomplete="off">
         <div class="h3x-form-group">
             <label for="name">What's Your Name:</label>
             <input type="text" id="name" name="name" class="h3x-input-disable-on-nav" placeholder="Your Name">
