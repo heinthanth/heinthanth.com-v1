@@ -1,25 +1,11 @@
 # H31N TH4NTH
 
-Personal portfolio website source code of Hein Thanth.
+```
+  _  _ _____ _ _   _ __  __     _ _  ___ 
+ | || |__ / (_) | | |  \/  |_ _| | |/ _ \
+ | __ ||_ \ | | |_| | |\/| \ \ /_  _\_, /
+ |_||_|___/_|_|\___/|_|  |_/_\_\ |_| /_/ 
+                                         
+```
 
-Technologies used
-
-- HTML
-
-- CSS
-
-- SASS
-
-- JavaScript
-
-- jQuery
-
-- TouchSwipe jQuery Plugin
-
-- Laravel
-
-- MySQL
-
-Free free to submit issues and bugs.
-
-H31iUMx49
+Personal portfolio website of Hein Thanth.
