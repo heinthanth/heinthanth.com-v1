@@ -1,2 +1,1 @@
-User-agent: *
-Disallow:
+# yes, yes ... Here's your flag! h3x{d0y0uth1nk1m5tup1d}
