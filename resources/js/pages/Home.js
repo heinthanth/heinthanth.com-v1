@@ -1,10 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import $ from "jquery";
+import ScrollTopOnMount from "../components/ScrollTopOnMount";
 
 class HomePage extends React.Component {
+    componentDidMount() {
+        document.title = "Hein Thanth | H31iUMx49";
+        $(window).trigger("pageloaded");
+    }
     render() {
         return (
             <React.Fragment>
+                <ScrollTopOnMount/>
                 <section id="about" className="h3x-section">
                     <img
                         src="/image/profile.jpg"

@@ -21,7 +21,7 @@ class Content extends React.Component {
 const AnimatedContent = props => {
     let location = useLocation();
     return (
-        <SwitchTransition>
+        <TransitionGroup>
             <CSSTransition
                 classNames="fade"
                 timeout={600}
@@ -39,7 +39,7 @@ const AnimatedContent = props => {
                     </Route>
                 </Switch>
             </CSSTransition>
-        </SwitchTransition>
+        </TransitionGroup>
     );
 };
 

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import $ from "jquery";
+import ScrolledProgress from "./ScrolledProgress";
 import SideNav from "./SideNav";
 import Footer from "./Footer";
 import Content from "./Content";
@@ -10,21 +12,19 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            scrolled: 0,
             navbarcollapsed: true
         };
-        this.setprogress = this.setprogress.bind(this);
         this.toggleNav = this.toggleNav.bind(this);
     }
 
     componentDidMount() {
         warnxss();
-        $("#main-content").scroll(() => {
-            this.setprogress();
-        });
-        $(window).on("pushstate", () => {
-            console.log("route changed!");
-            //window.setTimeout(() => {this.setState({navbarcollapsed: true})}, 1000);
+        $(window).on("pageloaded", () => {
+            setTimeout(() => {
+                this.setState({
+                    navbarcollapsed: true
+                });
+            }, 600);
         });
     }
 
@@ -33,23 +33,6 @@ class Main extends React.Component {
         this.setState({
             navbarcollapsed: status
         });
-    }
-
-    setprogress() {
-        var winScroll = document.getElementById("main-content").scrollTop;
-        var height =
-            document.getElementById("main-content").scrollHeight -
-            document.getElementById("main-content").clientHeight;
-        if (height > 0) {
-            var scrolled = (winScroll / height) * 100;
-            this.setState({
-                scrolled: scrolled
-            });
-        } else {
-            this.setState({
-                scrolled: 0
-            });
-        }
     }
 
     render() {
@@ -68,20 +51,10 @@ class Main extends React.Component {
                     </button>
                 </header>
                 <div className="h3x-wrapper">
-                    <div
-                        className="h3x-page-scroll-progress"
-                        style={{ width: `${this.state.scrolled}%` }}
-                    ></div>
+                    <ScrolledProgress />
                     <div className="h3x-row" id="main-container">
                         <SideNav collapsed={this.state.navbarcollapsed} />
-                        <div
-                            id="main-content"
-                            style={{
-                                transform: `translateX(${
-                                    this.state.navbarcollapsed ? "0px" : "250px"
-                                })`
-                            }}
-                        >
+                        <div id="main-content">
                             <Content />
                             <Footer />
                         </div>
