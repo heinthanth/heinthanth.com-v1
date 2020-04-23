@@ -119,10 +119,10 @@ h1, h2, h3, h4, h5, h6, p
 			width: unset
 			position: relative
 			font-size: 20px
-		main
+		#main-content
 			flex: 80%
 
-main
+#main-content
 	padding: 16px 24px
 	margin-top: $_NavBarHeight
 	overflow-y: scroll
@@ -172,6 +172,12 @@ footer
 		align-items: center
 		justify-content: space-between
 		padding-top: 0
+	@media (min-width: $sm) and (max-width: 767.99999px)
+		left: calc( 50% - (#{$sm} / 2) )
+	@media (min-width: $md) and (max-width: 991.99999px)
+		left: calc( 50% - (#{$md} / 2) )
+	@media (min-width: $lg)
+		left: 0px
 	ul
 		list-style-type: none
 		margin: 0px
@@ -376,3 +382,19 @@ footer
 		@media ( min-width: $lg )
 			text-align: center
 			width: 50%
+
+.fade-enter
+	opacity: 0
+
+.fade-exit
+	opacity: 1
+
+.fade-enter-active
+	opacity: 1
+
+.fade-exit-active
+	opacity: 0
+
+.fade-enter-active,
+.fade-exit-active
+	transition: opacity 300ms ease-in

@@ -5,9 +5,10 @@ class Footer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            collapsed: false
-		};
-		this.hack = this.hack.bind(this);
+            collapsed: false,
+            fake: false
+        };
+        this.hack = this.hack.bind(this);
     }
 
     hack() {
@@ -15,34 +16,26 @@ class Footer extends React.Component {
             document.getElementById("main-content").scrollHeight -
             document.getElementById("main-content").clientHeight;
         if (height <= 0) {
-            if (!$(".h3x-fake-footer").length) {
-                $("#main-content").append(
-                    `<div class="h3x-active-footer h3x-fake-footer">${$(
-                        "footer"
-                    ).html()}</div>`
-                );
-            }
-            $("footer").removeClass("h3x-active-footer");
-            $("footer").css({
-                visibility: "hidden"
+            this.setState({
+                fake: true
             });
         } else {
-            $(".h3x-fake-footer").remove();
-            $("footer").addClass("h3x-active-footer");
-            $("footer").css({
-                visibility: "visible"
+            this.setState({
+                fake: false
             });
         }
     }
 
     componentDidMount() {
-		this.hack();
-		$(window).resize(() => { this.hack(); })
-	}
+        this.hack();
+        $(window).resize(() => {
+            this.hack();
+        });
+    }
 
     render() {
         return (
-            <footer>
+            <footer className={this.state.fake ? "h3x-fake-footer" : ""}>
                 <span className="h3x-svg-font">
                     <img src="/icons/cc.svg" alt="Creative Common" />
                 </span>{" "}

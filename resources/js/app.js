@@ -4,7 +4,9 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
+
+// override react dev tools to make app undetected.
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -12,4 +14,17 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Main');
+(function(history) {
+    var pushState = history.pushState;
+    history.pushState = function(state) {
+        if (typeof history.onpushstate == "function") {
+            history.onpushstate({ state: state });
+		}
+        window.$(window).trigger("pushstate");
+        // ... whatever else you want to do
+        // maybe call onhashchange e.handler
+        return pushState.apply(history, arguments);
+    };
+})(window.history);
+
+require("./components/Main");

@@ -13,6 +13,6 @@ require('laravel-mix-react-css-modules');
  */
 
 mix.react("resources/js/app.js", "public/js")
+   .extract(['jquery', 'react', 'react-dom', 'react-router-dom'])
    .reactCSSModules('h3x_[local]__[hash:base64:8]')
-   .sass("resources/sass/app.sass", "public/css")
-   .version();
+   .sass("resources/sass/app.sass", "public/css");
